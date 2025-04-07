@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/src/model/dio_base_response.dart';
 import 'package:dio_cache_interceptor/src/extension/cache_response_extension.dart';
 import 'package:dio_cache_interceptor/src/extension/request_extension.dart';
+import 'package:dio_cache_interceptor/src/model/dio_base_response.dart';
 import 'package:http_cache_core/http_cache_core.dart';
 
-import 'model/dio_base_request.dart';
 import 'extension/response_extension.dart';
+import 'model/dio_base_request.dart';
 
 part 'dio_cache_interceptor_cache_utils.dart';
+
+typedef CacheCallback = Future<void> Function(Response? cachedResponse);
 
 /// Cache interceptor
 class DioCacheInterceptor extends Interceptor {
@@ -55,6 +57,15 @@ class DioCacheInterceptor extends Interceptor {
     var cacheResponse = strategy.cacheResponse;
     if (cacheResponse != null) {
       // Cache hit
+      if (options.extra[extraIsCacheKey] == true) {
+        final cacheCallback = options.extra['cacheCallback'] as CacheCallback?;
+        if (cacheCallback != null) {
+          await cacheCallback(
+              cacheResponse.toResponse(options, fromNetwork: false));
+        }
+        handler.next(options);
+        return;
+      }
 
       // Finish reading content from cached response
       cacheResponse = await cacheResponse.readContent(

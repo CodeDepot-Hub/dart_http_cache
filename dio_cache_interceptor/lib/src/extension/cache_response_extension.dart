@@ -13,6 +13,8 @@ const String extraFromNetworkKey = '@fromNetwork@';
 /// Available in [RequestOptions] to know when request has been sent.
 const String extraRequestSentDateKey = '@requestSentDate@';
 
+const String extraIsCacheKey = 'is_cache';
+
 extension CacheResponseExtension on CacheResponse {
   Response toResponse(RequestOptions options, {bool fromNetwork = false}) {
     return Response(
