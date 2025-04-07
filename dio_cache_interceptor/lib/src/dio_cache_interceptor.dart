@@ -60,7 +60,9 @@ class DioCacheInterceptor extends Interceptor {
     if (cacheResponse != null) {
       // Cache hit
       if (options.extra[extraIsCacheKey] == true) {
+        print("CachePolicy.request extra:${options.extra[extraIsCacheKey]}");
         final cacheCallback = options.extra['cacheCallback'] as CacheCallback?;
+        print("CachePolicy.request extra:${options.extra['cacheCallback']}");
         if (cacheCallback != null) {
           await cacheCallback(
               cacheResponse.toResponse(options, fromNetwork: false));
