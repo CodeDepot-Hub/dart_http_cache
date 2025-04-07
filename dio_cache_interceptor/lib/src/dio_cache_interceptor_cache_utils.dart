@@ -87,7 +87,6 @@ extension _DioCacheInterceptorUtils on DioCacheInterceptor {
     );
 
     final cacheResp = strategy.cacheResponse;
-    print("cacheResponse:${cacheResp}");
     if (cacheResp != null) {
       // Store response to cache store
       await _getCacheStore(cacheOptions).set(cacheResp);
