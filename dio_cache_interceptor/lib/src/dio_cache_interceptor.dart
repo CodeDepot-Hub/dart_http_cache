@@ -54,11 +54,10 @@ class DioCacheInterceptor extends Interceptor {
       cacheOptions: cacheOptions,
     ).compute();
 
-    print("CachePolicy.request extra:${options.extra}");
-
     var cacheResponse = strategy.cacheResponse;
     if (cacheResponse != null) {
       // Cache hit
+      print("CachePolicy extra:${options.extra[extraIsCacheKey]}");
       if (options.extra[extraIsCacheKey] == true) {
         print("CachePolicy.request extra:${options.extra[extraIsCacheKey]}");
         final cacheCallback = options.extra['cacheCallback'] as CacheCallback?;
