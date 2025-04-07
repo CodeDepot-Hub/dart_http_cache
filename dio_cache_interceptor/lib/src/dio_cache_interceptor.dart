@@ -54,6 +54,8 @@ class DioCacheInterceptor extends Interceptor {
       cacheOptions: cacheOptions,
     ).compute();
 
+    print("CachePolicy.request extra:${options.extra}");
+
     var cacheResponse = strategy.cacheResponse;
     if (cacheResponse != null) {
       // Cache hit
