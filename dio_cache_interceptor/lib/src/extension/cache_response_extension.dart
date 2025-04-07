@@ -15,6 +15,8 @@ const String extraRequestSentDateKey = '@requestSentDate@';
 
 const String extraIsCacheKey = 'is_cache';
 
+const String extraCallBack = 'cacheCallback';
+
 extension CacheResponseExtension on CacheResponse {
   Response toResponse(RequestOptions options, {bool fromNetwork = false}) {
     return Response(

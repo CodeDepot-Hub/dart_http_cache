@@ -56,26 +56,25 @@ class DioCacheInterceptor extends Interceptor {
 
     var cacheResponse = strategy.cacheResponse;
     if (cacheResponse != null) {
-      // Cache hit
-      print("CachePolicy extra:${options.extra[extraIsCacheKey]}");
-      if (options.extra[extraIsCacheKey] == true) {
-        print("CachePolicy.request extra:${options.extra[extraIsCacheKey]}");
-        final cacheCallback = options.extra['cacheCallback'] as CacheCallback?;
-        print("CachePolicy.request extra:${options.extra['cacheCallback']}");
-        if (cacheCallback != null) {
-          await cacheCallback(
-              cacheResponse.toResponse(options, fromNetwork: false));
-        }
-        handler.next(options);
-        return;
-      }
-
       // Finish reading content from cached response
       cacheResponse = await cacheResponse.readContent(
         cacheOptions,
         readHeaders: false,
         readBody: true,
       );
+
+      //文本
+      if (options.extra[extraIsCacheKey] == true) {
+        if (options.extra.containsKey(extraCallBack)) {
+          final cacheCallback = options.extra[extraCallBack] as CacheCallback?;
+          if (cacheCallback != null) {
+            await cacheCallback(
+                cacheResponse.toResponse(options, fromNetwork: false));
+          }
+          handler.next(options);
+          return;
+        }
+      }
 
       // Update cached response if needed
       cacheResponse = await _updateCacheResponse(cacheResponse, cacheOptions);
@@ -101,7 +100,6 @@ class DioCacheInterceptor extends Interceptor {
     ResponseInterceptorHandler handler,
   ) async {
     final cacheOptions = _getCacheOptions(response.requestOptions);
-
     if (_shouldSkip(
       response.requestOptions,
       response: response,
@@ -126,7 +124,6 @@ class DioCacheInterceptor extends Interceptor {
         response = cacheResponse..updateCacheHeaders(response);
       }
     }
-
     await _saveResponse(
       response,
       cacheOptions,
