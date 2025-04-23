@@ -74,6 +74,8 @@ class DioCacheInterceptor extends Interceptor {
           handler.next(options);
           return;
         }
+        handler.next(options);
+        return;
       }
 
       // Update cached response if needed
